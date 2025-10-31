@@ -14,4 +14,8 @@ For spell schools, map them yourself.
 
 For armor, make /items/armor have all armor, but also have /items/armor/light, /items/armor/medium, /items/armor/heavy, etc.cc
 
+before you do any code modification, run the below
+
+cd "C:\Users\mfitz\Documents\GitHub Clones\mikitz\shuryogeumku"
+
 any questions before you begin?
