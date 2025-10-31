@@ -2,7 +2,9 @@
 
 You are going to make a SSG site using generateStaticParams in this project. You will use data from @/lib/data to create a static page for every spell, item, and monster in the game.
 
-The homepage is an index file that routes to a table of /spells, /items, and /monsters. Also have index files that are tables of, e.g. /spells/wizard, /spells/evocation, /items/weapon, /items/armor, /items/poisons, /items/potions, /monsters/aberration, /monsters/beast, etc.
+The homepage is an index file that routes to a table of /spells, /items, and /monsters and should be simple, just 3 tailwind cards for the three routes. Also have index files that are tables of, e.g. /spells/wizard, /spells/evocation, /items/weapon, /items/armor, /items/poisons, /items/potions, /monsters/aberration, /monsters/beast, etc.
+
+The tables should be formatted HTML tables with columns (e.g., name, level/school for spells)
 
 The data will only be taken from xphb, xdmg, and xmm.
 
