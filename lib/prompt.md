@@ -12,9 +12,15 @@ URLs should use the full name and replace spaces with hyphens.
 
 For items, filter on the type field: M = melee weapon, G = poison, P = potion, etc. and also use various booleans, like poison, potion, etc. to filter the items.
 
-For spell schools, map them yourself.
+For spell schools, use the standard D&D mapping.
 
-For armor, make /items/armor have all armor, but also have /items/armor/light, /items/armor/medium, /items/armor/heavy, etc.cc
+For armor, make /items/armor have all armor, but also have /items/armor/light, /items/armor/medium, /items/armor/heavy. Also include type codes, like HA/LA/MA.
+
+For item type filtering, /items/weapons should have all weapons, but also make a /items/melee and /items/ranged routes.
+
+individual pages should show all data from the JSON.
+
+for spell class filtering, get that data from sources.json.
 
 before you do any code modification, run the below
 
