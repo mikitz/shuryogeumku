@@ -372,8 +372,7 @@ export default async function SpellPage({ params }: PageProps) {
                 {[
                   spell.components.v && 'V',
                   spell.components.s && 'S',
-                  spell.components.m && `M${typeof spell.components.m === 'string' ? ` (${spell.components.m})` : ''}`,
-                  spell.components.r && 'R'
+                  spell.components.m && `M${typeof spell.components.m === 'string' ? ` (${spell.components.m})` : ''}`
                 ].filter(Boolean).join(', ')}
               </span>
             </div>
@@ -422,7 +421,7 @@ export default async function SpellPage({ params }: PageProps) {
           )}
 
           {/* Additional Information */}
-          {(spell.damageInflict || spell.savingThrow || spell.attackType) && (
+          {(spell.damageInflict || spell.savingThrow || (spell as any).attackType) && (
             <div className="border-t border-zinc-200 dark:border-zinc-700 pt-4">
               <h3 className="text-lg font-semibold mb-3 text-black dark:text-zinc-50">Details</h3>
               <div className="space-y-2 text-sm">
@@ -442,11 +441,11 @@ export default async function SpellPage({ params }: PageProps) {
                     </span>
                   </div>
                 )}
-                {spell.attackType && (
+                {(spell as any).attackType && (
                   <div>
                     <span className="font-semibold text-zinc-700 dark:text-zinc-300">Attack Type:</span>{' '}
                     <span className="text-zinc-900 dark:text-zinc-100 capitalize">
-                      {spell.attackType}
+                      {(spell as any).attackType}
                     </span>
                   </div>
                 )}
