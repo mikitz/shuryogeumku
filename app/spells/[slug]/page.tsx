@@ -284,196 +284,176 @@ export default async function SpellPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-black py-8 px-4">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <div className="mb-6">
           <Link 
             href="/spells"
-            className="text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center gap-1"
+            className="text-blue-600 dark:text-blue-400 hover:underline"
           >
             ← Back to Spells
           </Link>
         </div>
         
-        {/* Header Card */}
-        <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6 mb-6 border border-zinc-200 dark:border-zinc-800">
-          <h1 className="text-4xl font-bold mb-2 text-black dark:text-zinc-50">
+        <div className="bg-white dark:bg-zinc-900 rounded-lg shadow p-6 mb-6">
+          <h1 className="text-4xl font-bold mb-4 text-black dark:text-zinc-50">
             {spell.name}
           </h1>
-          <div className="flex flex-wrap gap-4 text-sm mt-4">
-            <div className="bg-blue-100 dark:bg-blue-900/30 px-3 py-1 rounded-full">
-              <span className="font-semibold text-blue-800 dark:text-blue-200">Level: </span>
-              <span className="text-blue-900 dark:text-blue-100">
-                {spell.level === 0 ? 'Cantrip' : `Level ${spell.level}`}
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm">
+            <div>
+              <span className="font-semibold text-zinc-600 dark:text-zinc-400">Level:</span>{' '}
+              <span className="text-zinc-900 dark:text-zinc-100">
+                {spell.level === 0 ? 'Cantrip' : spell.level}
               </span>
             </div>
-            <div className="bg-purple-100 dark:bg-purple-900/30 px-3 py-1 rounded-full">
-              <span className="font-semibold text-purple-800 dark:text-purple-200">School: </span>
-              <span className="text-purple-900 dark:text-purple-100">
+            <div>
+              <span className="font-semibold text-zinc-600 dark:text-zinc-400">School:</span>{' '}
+              <span className="text-zinc-900 dark:text-zinc-100">
                 {SPELL_SCHOOLS[spell.school] || spell.school}
               </span>
             </div>
+            <div>
+              <span className="font-semibold text-zinc-600 dark:text-zinc-400">Source:</span>{' '}
+              <span className="text-zinc-900 dark:text-zinc-100">{spell.source}</span>
+            </div>
             {allClasses.length > 0 && (
-              <div className="bg-green-100 dark:bg-green-900/30 px-3 py-1 rounded-full">
-                <span className="font-semibold text-green-800 dark:text-green-200">Classes: </span>
-                <span className="text-green-900 dark:text-green-100">
+              <div>
+                <span className="font-semibold text-zinc-600 dark:text-zinc-400">Classes:</span>{' '}
+                <span className="text-zinc-900 dark:text-zinc-100">
                   {[...new Set(allClasses)].join(', ')}
                 </span>
               </div>
             )}
           </div>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          {/* Casting Details Card */}
-          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6 border border-zinc-200 dark:border-zinc-800">
-            <h2 className="text-xl font-bold mb-4 text-black dark:text-zinc-50 border-b border-zinc-200 dark:border-zinc-700 pb-2">
-              Casting Information
-            </h2>
-            <div className="space-y-4">
-              {spell.time && (
-                <div>
-                  <div className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-1">
-                    Casting Time
-                  </div>
-                  <div className="text-zinc-900 dark:text-zinc-100">
-                    {Array.isArray(spell.time) ? spell.time.map((t: any) => {
-                      if (typeof t === 'string') return t;
-                      if (typeof t === 'object' && t.number && t.unit) {
-                        return `${t.number} ${t.unit}${t.number > 1 ? 's' : ''}`;
-                      }
-                      return JSON.stringify(t);
-                    }).join(', ') : JSON.stringify(spell.time)}
-                  </div>
-                </div>
-              )}
-
-              {spell.range && (
-                <div>
-                  <div className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-1">
-                    Range
-                  </div>
-                  <div className="text-zinc-900 dark:text-zinc-100">
-                    {typeof spell.range === 'string' 
-                      ? spell.range 
-                      : spell.range.type === 'point' && spell.range.distance
-                        ? `${spell.range.distance.amount} ${spell.range.distance.type}`
-                        : spell.range.type === 'self' 
-                          ? 'Self' 
-                          : spell.range.type === 'sight'
-                            ? 'Sight'
-                            : spell.range.type === 'unlimited'
-                              ? 'Unlimited'
-                              : JSON.stringify(spell.range)}
-                  </div>
-                </div>
-              )}
-
-              {spell.components && (
-                <div>
-                  <div className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-1">
-                    Components
-                  </div>
-                  <div className="text-zinc-900 dark:text-zinc-100">
-                    {[
-                      spell.components.v && 'V',
-                      spell.components.s && 'S',
-                      spell.components.m && `M${typeof spell.components.m === 'string' ? ` (${spell.components.m})` : ''}`,
-                      spell.components.r && 'R'
-                    ].filter(Boolean).join(', ')}
-                  </div>
-                </div>
-              )}
-
-              {spell.duration && (
-                <div>
-                  <div className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-1">
-                    Duration
-                  </div>
-                  <div className="text-zinc-900 dark:text-zinc-100">
-                    {Array.isArray(spell.duration) ? spell.duration.map((d: any) => {
-                      if (typeof d === 'string') return d;
-                      if (typeof d === 'object') {
-                        if (d.type === 'instant') return 'Instantaneous';
-                        if (d.type === 'timed' && d.duration) {
-                          return `${d.duration.amount} ${d.duration.type}${d.duration.amount > 1 ? 's' : ''}${d.concentration ? ' (Concentration)' : ''}`;
-                        }
-                        if (d.concentration) return 'Concentration';
-                        return JSON.stringify(d);
-                      }
-                      return JSON.stringify(d);
-                    }).join(', ') : JSON.stringify(spell.duration)}
-                    {spell.meta?.ritual && ' (Ritual)'}
-                  </div>
-                </div>
-              )}
+        
+        <div className="bg-white dark:bg-zinc-900 rounded-lg shadow p-6 space-y-6">
+          {/* Casting Time */}
+          {spell.time && (
+            <div>
+              <span className="font-semibold text-zinc-700 dark:text-zinc-300">Casting Time:</span>{' '}
+              <span className="text-zinc-900 dark:text-zinc-100">
+                {Array.isArray(spell.time) ? spell.time.map((t: any) => {
+                  if (typeof t === 'string') return t;
+                  if (typeof t === 'object' && t.number && t.unit) {
+                    return `${t.number} ${t.unit}${t.number > 1 ? 's' : ''}`;
+                  }
+                  return JSON.stringify(t);
+                }).join(', ') : JSON.stringify(spell.time)}
+              </span>
             </div>
-          </div>
+          )}
 
-          {/* Additional Details Card */}
+          {/* Range */}
+          {spell.range && (
+            <div>
+              <span className="font-semibold text-zinc-700 dark:text-zinc-300">Range:</span>{' '}
+              <span className="text-zinc-900 dark:text-zinc-100">
+                {typeof spell.range === 'string' 
+                  ? spell.range 
+                  : spell.range.type === 'point' && spell.range.distance
+                    ? `${spell.range.distance.amount} ${spell.range.distance.type}`
+                    : spell.range.type === 'self' 
+                      ? 'Self' 
+                      : spell.range.type === 'sight'
+                        ? 'Sight'
+                        : spell.range.type === 'unlimited'
+                          ? 'Unlimited'
+                          : JSON.stringify(spell.range)}
+              </span>
+            </div>
+          )}
+
+          {/* Components */}
+          {spell.components && (
+            <div>
+              <span className="font-semibold text-zinc-700 dark:text-zinc-300">Components:</span>{' '}
+              <span className="text-zinc-900 dark:text-zinc-100">
+                {[
+                  spell.components.v && 'V',
+                  spell.components.s && 'S',
+                  spell.components.m && `M${typeof spell.components.m === 'string' ? ` (${spell.components.m})` : ''}`,
+                  spell.components.r && 'R'
+                ].filter(Boolean).join(', ')}
+              </span>
+            </div>
+          )}
+
+          {/* Duration */}
+          {spell.duration && (
+            <div>
+              <span className="font-semibold text-zinc-700 dark:text-zinc-300">Duration:</span>{' '}
+              <span className="text-zinc-900 dark:text-zinc-100">
+                {Array.isArray(spell.duration) ? spell.duration.map((d: any) => {
+                  if (typeof d === 'string') return d;
+                  if (typeof d === 'object') {
+                    if (d.type === 'instant') return 'Instantaneous';
+                    if (d.type === 'timed' && d.duration) {
+                      return `${d.duration.amount} ${d.duration.type}${d.duration.amount > 1 ? 's' : ''}${d.concentration ? ' (Concentration)' : ''}`;
+                    }
+                    if (d.concentration) return 'Concentration';
+                    return JSON.stringify(d);
+                  }
+                  return JSON.stringify(d);
+                }).join(', ') : JSON.stringify(spell.duration)}
+                {spell.meta?.ritual && ' (Ritual)'}
+              </span>
+            </div>
+          )}
+
+          {/* Spell Description */}
+          {spell.entries && (
+            <div>
+              <h3 className="text-xl font-semibold mb-3 text-black dark:text-zinc-50">Description</h3>
+              <div className="text-zinc-800 dark:text-zinc-200 space-y-3 prose prose-zinc dark:prose-invert max-w-none">
+                {renderEntries(spell.entries)}
+              </div>
+            </div>
+          )}
+
+          {/* Higher Level */}
+          {spell.entriesHigherLevel && (
+            <div>
+              <h3 className="text-xl font-semibold mb-3 text-black dark:text-zinc-50">At Higher Levels</h3>
+              <div className="text-zinc-800 dark:text-zinc-200 space-y-3 prose prose-zinc dark:prose-invert max-w-none">
+                {renderEntries(spell.entriesHigherLevel)}
+              </div>
+            </div>
+          )}
+
+          {/* Additional Information */}
           {(spell.damageInflict || spell.savingThrow || spell.attackType) && (
-            <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6 border border-zinc-200 dark:border-zinc-800">
-              <h2 className="text-xl font-bold mb-4 text-black dark:text-zinc-50 border-b border-zinc-200 dark:border-zinc-700 pb-2">
-                Additional Details
-              </h2>
-              <div className="space-y-4">
+            <div className="border-t border-zinc-200 dark:border-zinc-700 pt-4">
+              <h3 className="text-lg font-semibold mb-3 text-black dark:text-zinc-50">Details</h3>
+              <div className="space-y-2 text-sm">
                 {spell.damageInflict && (
                   <div>
-                    <div className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-1">
-                      Damage Type
-                    </div>
-                    <div className="text-zinc-900 dark:text-zinc-100 capitalize">
+                    <span className="font-semibold text-zinc-700 dark:text-zinc-300">Damage Type:</span>{' '}
+                    <span className="text-zinc-900 dark:text-zinc-100 capitalize">
                       {Array.isArray(spell.damageInflict) ? spell.damageInflict.join(', ') : spell.damageInflict}
-                    </div>
+                    </span>
                   </div>
                 )}
                 {spell.savingThrow && (
                   <div>
-                    <div className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-1">
-                      Saving Throw
-                    </div>
-                    <div className="text-zinc-900 dark:text-zinc-100 capitalize">
+                    <span className="font-semibold text-zinc-700 dark:text-zinc-300">Saving Throw:</span>{' '}
+                    <span className="text-zinc-900 dark:text-zinc-100 capitalize">
                       {Array.isArray(spell.savingThrow) ? spell.savingThrow.join(', ') : spell.savingThrow}
-                    </div>
+                    </span>
                   </div>
                 )}
                 {spell.attackType && (
                   <div>
-                    <div className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-1">
-                      Attack Type
-                    </div>
-                    <div className="text-zinc-900 dark:text-zinc-100 capitalize">
+                    <span className="font-semibold text-zinc-700 dark:text-zinc-300">Attack Type:</span>{' '}
+                    <span className="text-zinc-900 dark:text-zinc-100 capitalize">
                       {spell.attackType}
-                    </div>
+                    </span>
                   </div>
                 )}
               </div>
             </div>
           )}
         </div>
-
-        {/* Description Card */}
-        {spell.entries && (
-          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6 mb-6 border border-zinc-200 dark:border-zinc-800">
-            <h2 className="text-xl font-bold mb-4 text-black dark:text-zinc-50 border-b border-zinc-200 dark:border-zinc-700 pb-2">
-              Description
-            </h2>
-            <div className="text-zinc-800 dark:text-zinc-200 space-y-3 prose prose-zinc dark:prose-invert max-w-none">
-              {renderEntries(spell.entries)}
-            </div>
-          </div>
-        )}
-
-        {/* Higher Level Card */}
-        {spell.entriesHigherLevel && (
-          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6 border border-zinc-200 dark:border-zinc-800">
-            <h2 className="text-xl font-bold mb-4 text-black dark:text-zinc-50 border-b border-zinc-200 dark:border-zinc-700 pb-2">
-              At Higher Levels
-            </h2>
-            <div className="text-zinc-800 dark:text-zinc-200 space-y-3 prose prose-zinc dark:prose-invert max-w-none">
-              {renderEntries(spell.entriesHigherLevel)}
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
