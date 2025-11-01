@@ -59,9 +59,14 @@ export default async function SpellPage({ params }: PageProps) {
               ← Back to Spells
             </Link>
           </div>
-          <h1 className="text-4xl font-bold mb-8 text-black dark:text-zinc-50 capitalize">
-            {slugLower} Spells
-          </h1>
+          <div className="mb-8">
+            <h1 className="text-4xl font-bold mb-2 text-black dark:text-zinc-50 capitalize">
+              {slugLower} Spells
+            </h1>
+            <p className="text-zinc-600 dark:text-zinc-400">
+              Total: {classSpells.length} {classSpells.length === 1 ? 'spell' : 'spells'}
+            </p>
+          </div>
           <div className="bg-white dark:bg-zinc-900 rounded-lg shadow overflow-hidden">
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800">
@@ -137,9 +142,14 @@ export default async function SpellPage({ params }: PageProps) {
               ← Back to Spells
             </Link>
           </div>
-          <h1 className="text-4xl font-bold mb-8 text-black dark:text-zinc-50">
-            {SPELL_SCHOOLS[schoolKey]} Spells
-          </h1>
+          <div className="mb-8">
+            <h1 className="text-4xl font-bold mb-2 text-black dark:text-zinc-50">
+              {SPELL_SCHOOLS[schoolKey]} Spells
+            </h1>
+            <p className="text-zinc-600 dark:text-zinc-400">
+              Total: {schoolSpells.length} {schoolSpells.length === 1 ? 'spell' : 'spells'}
+            </p>
+          </div>
           <div className="bg-white dark:bg-zinc-900 rounded-lg shadow overflow-hidden">
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800">

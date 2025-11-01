@@ -141,25 +141,63 @@ export function getItemsByType(type: string) {
         i.type === 'M' || i.type === 'R' || i.weapon || i.weaponCategory
       );
     case 'melee':
-      return allItems.filter((i: any) => i.type === 'M');
+      return allItems.filter((i: any) => {
+        if (!i.type) return false;
+        const typeStr = String(i.type);
+        return typeStr.includes('M') || (i.weapon === true && !i.type?.includes('R'));
+      });
     case 'ranged':
-      return allItems.filter((i: any) => i.type === 'R');
+      return allItems.filter((i: any) => {
+        if (!i.type) return false;
+        const typeStr = String(i.type);
+        return typeStr.includes('R') || (i.weapon === true && typeStr.includes('R'));
+      });
     case 'armor':
-      return allItems.filter((i: any) => 
-        i.type === 'LA' || i.type === 'MA' || i.type === 'HA'
-      );
+      return allItems.filter((i: any) => {
+        if (!i.type) return false;
+        const typeStr = String(i.type);
+        return typeStr.includes('LA') || typeStr.includes('MA') || typeStr.includes('HA') || i.armor === true;
+      });
     case 'light':
-      return allItems.filter((i: any) => i.type === 'LA');
+      return allItems.filter((i: any) => {
+        if (!i.type) return false;
+        const typeStr = String(i.type);
+        return typeStr.includes('LA') || (i.armor === true && typeStr.toLowerCase().includes('light'));
+      });
     case 'medium':
-      return allItems.filter((i: any) => i.type === 'MA');
+      return allItems.filter((i: any) => {
+        if (!i.type) return false;
+        const typeStr = String(i.type);
+        return typeStr.includes('MA') || (i.armor === true && typeStr.toLowerCase().includes('medium'));
+      });
     case 'heavy':
-      return allItems.filter((i: any) => i.type === 'HA');
+      return allItems.filter((i: any) => {
+        if (!i.type) return false;
+        const typeStr = String(i.type);
+        return typeStr.includes('HA') || (i.armor === true && typeStr.toLowerCase().includes('heavy'));
+      });
     case 'poisons':
       return allItems.filter((i: any) => 
         i.type === 'G' || i.poison === true
       );
     case 'potions':
-      return allItems.filter((i: any) => i.type === 'P');
+      return allItems.filter((i: any) => {
+        if (!i.type) return false;
+        const typeStr = String(i.type);
+        return typeStr.includes('P') || i.potion === true;
+      });
+    case 'rings':
+      return allItems.filter((i: any) => 
+        i.type === 'RG' || i.type?.includes('RG') || i.name?.toLowerCase().includes('ring')
+      );
+    case 'rods':
+      return allItems.filter((i: any) => 
+        i.type === 'RD' || i.type?.includes('RD') || i.name?.toLowerCase().includes('rod')
+      );
+    case 'wands':
+      return allItems.filter((i: any) => 
+        i.type === 'WD' || i.type?.includes('WD') || i.name?.toLowerCase().includes('wand')
+      );
     default:
       return [];
   }
@@ -237,6 +275,30 @@ export function getMonstersByType(type: string) {
     const monsterType = typeof m.type === 'string' ? m.type : (m.type && typeof m.type === 'object' ? m.type.type : null);
     if (!monsterType || typeof monsterType !== 'string') return false;
     return String(monsterType).toLowerCase() === typeLower;
+  });
+}
+
+// Get monsters by CR
+export function getMonstersByCR(cr: string) {
+  const allMonsters = getAllMonsters();
+  if (!cr || typeof cr !== 'string') return [];
+  // Handle CR slugs - they might have underscores or hyphens for fractions
+  // Convert common URL-safe formats back to fractions
+  const crNormalized = cr.toLowerCase()
+    .replace(/1-8/g, '1/8')
+    .replace(/1-4/g, '1/4')
+    .replace(/1-2/g, '1/2')
+    .replace(/3-4/g, '3/4');
+  
+  return allMonsters.filter((m: any) => {
+    if (!m.cr) return false;
+    const crValue = getCRValue(m.cr);
+    if (!crValue || crValue === '-') return false;
+    const crValueLower = String(crValue).toLowerCase();
+    // Compare both normalized formats and direct match
+    return crValueLower === crNormalized || 
+           crValueLower === cr.toLowerCase() ||
+           crValueLower.replace(/\//g, '-') === cr.toLowerCase();
   });
 }
 

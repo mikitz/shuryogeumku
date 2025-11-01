@@ -27,7 +27,10 @@ export async function generateStaticParams() {
     'medium',
     'heavy',
     'poisons',
-    'potions'
+    'potions',
+    'rings',
+    'rods',
+    'wands'
   ].map(f => ({ slug: f }));
   
   return [...itemSlugs, ...filterSlugs];
@@ -52,6 +55,9 @@ export default async function ItemPage({ params }: PageProps) {
     'heavy': 'heavy',
     'poisons': 'poisons',
     'potions': 'potions',
+    'rings': 'rings',
+    'rods': 'rods',
+    'wands': 'wands',
   };
   
   const filterType = filterMap[slugLower];
@@ -81,6 +87,12 @@ export default async function ItemPage({ params }: PageProps) {
       title = 'Poisons';
     } else if (slugLower === 'potions') {
       title = 'Potions';
+    } else if (slugLower === 'rings') {
+      title = 'Rings';
+    } else if (slugLower === 'rods') {
+      title = 'Rods';
+    } else if (slugLower === 'wands') {
+      title = 'Wands';
     }
     
     return (
@@ -94,9 +106,14 @@ export default async function ItemPage({ params }: PageProps) {
               ← Back to Items
             </Link>
           </div>
-          <h1 className="text-4xl font-bold mb-8 text-black dark:text-zinc-50 capitalize">
-            {title}
-          </h1>
+          <div className="mb-8">
+            <h1 className="text-4xl font-bold mb-2 text-black dark:text-zinc-50 capitalize">
+              {title}
+            </h1>
+            <p className="text-zinc-600 dark:text-zinc-400">
+              Total: {filteredItems.length} {filteredItems.length === 1 ? 'item' : 'items'}
+            </p>
+          </div>
           <div className="bg-white dark:bg-zinc-900 rounded-lg shadow overflow-hidden">
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800">
