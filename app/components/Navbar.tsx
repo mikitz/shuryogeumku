@@ -1,6 +1,6 @@
 /** @format */
 
-'use client';
+"use client";
 
 import Link from "next/link";
 import { ThemeToggle } from "./ThemeToggle";
@@ -19,10 +19,10 @@ export default function Navbar() {
                         </Link>
                         <div className="flex items-center space-x-6">
                             <Link
-                                href="/spells"
+                                href="/classes"
                                 className="text-zinc-700 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
                             >
-                                Spells
+                                Classes
                             </Link>
                             <Link
                                 href="/items"
@@ -35,6 +35,12 @@ export default function Navbar() {
                                 className="text-zinc-700 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
                             >
                                 Monsters
+                            </Link>
+                            <Link
+                                href="/spells"
+                                className="text-zinc-700 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
+                            >
+                                Spells
                             </Link>
                         </div>
                     </div>

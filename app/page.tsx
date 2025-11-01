@@ -1,12 +1,13 @@
 import Link from "next/link";
 import SearchBox from "./components/SearchBox";
-import { getAllSpells, getAllItems, getAllMonsters, spellNameToSlug, itemNameToSlug, monsterNameToSlug, SPELL_SCHOOLS } from "@/lib/utils/data";
+import { getAllSpells, getAllItems, getAllMonsters, getAllClasses, spellNameToSlug, itemNameToSlug, monsterNameToSlug, classNameToSlug, SPELL_SCHOOLS } from "@/lib/utils/data";
 
 export default function Home() {
   // Prepare search data
   const spells = getAllSpells();
   const items = getAllItems();
   const monsters = getAllMonsters();
+  const classes = getAllClasses();
   
   const searchItems = [
     ...spells.map((spell: any) => ({
@@ -26,6 +27,12 @@ export default function Home() {
       href: `/monsters/${monsterNameToSlug(monster.name)}`,
       type: 'Monster',
       metadata: monster.cr ? `CR: ${typeof monster.cr === 'string' ? monster.cr : monster.cr.cr || '-'}` : undefined
+    })),
+    ...classes.map((classItem: any) => ({
+      name: classItem.name,
+      href: `/classes/${classNameToSlug(classItem.name)}`,
+      type: 'Class',
+      metadata: classItem.source || undefined
     }))
   ];
 
@@ -38,19 +45,19 @@ export default function Home() {
         <div className="w-full mb-12">
           <SearchBox 
             items={searchItems} 
-            placeholder="Search spells, items, monsters..."
+            placeholder="Search spells, items, monsters, classes..."
           />
         </div>
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3 w-full">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4 w-full">
           <Link
-            href="/spells"
+            href="/classes"
             className="flex flex-col p-8 bg-white dark:bg-zinc-900 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-zinc-200 dark:border-zinc-800"
           >
             <h2 className="text-2xl font-semibold mb-4 text-black dark:text-zinc-50">
-              Spells
+              Classes
             </h2>
             <p className="text-zinc-600 dark:text-zinc-400">
-              Browse all spells from the 2024 Player&apos;s Handbook
+              Browse all character classes
             </p>
           </Link>
           <Link
@@ -73,6 +80,17 @@ export default function Home() {
             </h2>
             <p className="text-zinc-600 dark:text-zinc-400">
               Browse all monsters and creatures
+            </p>
+          </Link>
+          <Link
+            href="/spells"
+            className="flex flex-col p-8 bg-white dark:bg-zinc-900 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-zinc-200 dark:border-zinc-800"
+          >
+            <h2 className="text-2xl font-semibold mb-4 text-black dark:text-zinc-50">
+              Spells
+            </h2>
+            <p className="text-zinc-600 dark:text-zinc-400">
+              Browse all spells from the 2024 Player&apos;s Handbook
             </p>
           </Link>
         </div>

@@ -390,3 +390,68 @@ export function getSizeValue(size: any): string {
   return '-';
 }
 
+// Class data imports - import all class files
+import classArtificer from '@/lib/data/class/class-artificer.json';
+import classBarbarian from '@/lib/data/class/class-barbarian.json';
+import classBard from '@/lib/data/class/class-bard.json';
+import classCleric from '@/lib/data/class/class-cleric.json';
+import classDruid from '@/lib/data/class/class-druid.json';
+import classFighter from '@/lib/data/class/class-fighter.json';
+import classMonk from '@/lib/data/class/class-monk.json';
+import classPaladin from '@/lib/data/class/class-paladin.json';
+import classRanger from '@/lib/data/class/class-ranger.json';
+import classRogue from '@/lib/data/class/class-rogue.json';
+import classSorcerer from '@/lib/data/class/class-sorcerer.json';
+import classWarlock from '@/lib/data/class/class-warlock.json';
+import classWizard from '@/lib/data/class/class-wizard.json';
+
+// Get all classes from XPHB (2024 sources only)
+export function getAllClasses() {
+  const classes: any[] = [];
+  
+  // Array of all class modules
+  const classModules = [
+    classArtificer,
+    classBarbarian,
+    classBard,
+    classCleric,
+    classDruid,
+    classFighter,
+    classMonk,
+    classPaladin,
+    classRanger,
+    classRogue,
+    classSorcerer,
+    classWarlock,
+    classWizard,
+  ];
+  
+  // Loop through all class files and extract XPHB entries
+  classModules.forEach((classModule: any) => {
+    if (classModule && classModule.class && Array.isArray(classModule.class)) {
+      // Filter for only XPHB source (2024)
+      const xphbClasses = classModule.class.filter((c: any) => c.source === 'XPHB');
+      classes.push(...xphbClasses);
+    }
+  });
+  
+  return classes;
+}
+
+// Get class by name (URL slug)
+export function getClassBySlug(slug: string) {
+  const allClasses = getAllClasses();
+  const name = slug.split('-').map(w => 
+    w.charAt(0).toUpperCase() + w.slice(1)
+  ).join(' ');
+  
+  return allClasses.find((c: any) => 
+    c.name.toLowerCase() === name.toLowerCase()
+  );
+}
+
+// Convert class name to slug
+export function classNameToSlug(name: string): string {
+  return name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w+\-]/g, '');
+}
+
