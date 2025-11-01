@@ -131,73 +131,99 @@ export function getAllItems() {
   );
 }
 
+// Helper function to extract base type code from type string (handles M|XPHB format)
+function getBaseType(item: any): string {
+  if (!item.type) return '';
+  const typeStr = String(item.type);
+  // Extract the part before the pipe, or the whole string if no pipe
+  return typeStr.split('|')[0];
+}
+
 // Get items by type
 export function getItemsByType(type: string) {
   const allItems = getAllItems();
   
   switch (type) {
     case 'weapon':
-      return allItems.filter((i: any) => 
-        i.type === 'M' || i.type === 'R' || i.weapon || i.weaponCategory
-      );
+      return allItems.filter((i: any) => {
+        const baseType = getBaseType(i);
+        return baseType === 'M' || baseType === 'R' || i.weapon === true || i.weaponCategory;
+      });
     case 'melee':
       return allItems.filter((i: any) => {
-        if (!i.type) return false;
-        const typeStr = String(i.type);
-        return typeStr.includes('M') || (i.weapon === true && !i.type?.includes('R'));
+        const baseType = getBaseType(i);
+        return baseType === 'M' || (i.weapon === true && baseType !== 'R');
       });
     case 'ranged':
       return allItems.filter((i: any) => {
-        if (!i.type) return false;
-        const typeStr = String(i.type);
-        return typeStr.includes('R') || (i.weapon === true && typeStr.includes('R'));
+        const baseType = getBaseType(i);
+        return baseType === 'R';
       });
     case 'armor':
       return allItems.filter((i: any) => {
-        if (!i.type) return false;
-        const typeStr = String(i.type);
-        return typeStr.includes('LA') || typeStr.includes('MA') || typeStr.includes('HA') || i.armor === true;
+        const baseType = getBaseType(i);
+        return baseType === 'LA' || baseType === 'MA' || baseType === 'HA' || i.armor === true;
       });
     case 'light':
       return allItems.filter((i: any) => {
-        if (!i.type) return false;
-        const typeStr = String(i.type);
-        return typeStr.includes('LA') || (i.armor === true && typeStr.toLowerCase().includes('light'));
+        const baseType = getBaseType(i);
+        return baseType === 'LA';
       });
     case 'medium':
       return allItems.filter((i: any) => {
-        if (!i.type) return false;
-        const typeStr = String(i.type);
-        return typeStr.includes('MA') || (i.armor === true && typeStr.toLowerCase().includes('medium'));
+        const baseType = getBaseType(i);
+        return baseType === 'MA';
       });
     case 'heavy':
       return allItems.filter((i: any) => {
-        if (!i.type) return false;
-        const typeStr = String(i.type);
-        return typeStr.includes('HA') || (i.armor === true && typeStr.toLowerCase().includes('heavy'));
+        const baseType = getBaseType(i);
+        return baseType === 'HA';
       });
     case 'poisons':
-      return allItems.filter((i: any) => 
-        i.type === 'G' || i.poison === true
-      );
+      return allItems.filter((i: any) => i.poison === true);
     case 'potions':
       return allItems.filter((i: any) => {
-        if (!i.type) return false;
-        const typeStr = String(i.type);
-        return typeStr.includes('P') || i.potion === true;
+        const baseType = getBaseType(i);
+        return baseType === 'P' || i.potion === true;
       });
     case 'rings':
-      return allItems.filter((i: any) => 
-        i.type === 'RG' || i.type?.includes('RG') || i.name?.toLowerCase().includes('ring')
-      );
+      return allItems.filter((i: any) => {
+        const baseType = getBaseType(i);
+        return baseType === 'RG';
+      });
     case 'rods':
-      return allItems.filter((i: any) => 
-        i.type === 'RD' || i.type?.includes('RD') || i.name?.toLowerCase().includes('rod')
-      );
+      return allItems.filter((i: any) => {
+        const baseType = getBaseType(i);
+        return baseType === 'RD';
+      });
     case 'wands':
-      return allItems.filter((i: any) => 
-        i.type === 'WD' || i.type?.includes('WD') || i.name?.toLowerCase().includes('wand')
-      );
+      return allItems.filter((i: any) => {
+        const baseType = getBaseType(i);
+        return baseType === 'WD';
+      });
+    case 'wondrous':
+      return allItems.filter((i: any) => i.wondrous === true);
+    case 'wondrous-none':
+      return allItems.filter((i: any) => {
+        if (!i.wondrous) return false;
+        // Items with tier 'none' or rarity 'common'/'none' or no rarity
+        return i.tier === 'none' || 
+               (!i.tier && (!i.rarity || i.rarity === 'none' || i.rarity === 'common'));
+      });
+    case 'wondrous-minor':
+      return allItems.filter((i: any) => {
+        if (!i.wondrous) return false;
+        // Items with tier 'minor' or rarity 'uncommon'/'rare' without explicit tier
+        return i.tier === 'minor' || 
+               (!i.tier && (i.rarity === 'uncommon' || i.rarity === 'rare'));
+      });
+    case 'wondrous-major':
+      return allItems.filter((i: any) => {
+        if (!i.wondrous) return false;
+        // Items with tier 'major' or rarity 'very rare'/'legendary'/'artifact' without explicit tier
+        return i.tier === 'major' || 
+               (!i.tier && (i.rarity === 'very rare' || i.rarity === 'legendary' || i.rarity === 'artifact'));
+      });
     default:
       return [];
   }
